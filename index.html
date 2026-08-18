@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<meta name="description" content="Fast Food Zayn — Point de vente restaurant">
+<title>Fast Food Zayn</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icons/logo.jpg" type="image/jpeg">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- ================= LOGIN VIEW ================= -->
+<div id="view-login" class="view view-login">
+  <div class="login-bg"></div>
+  <div class="login-bg-overlay"></div>
+  <div class="login-card glass" id="loginCard">
+    <div class="login-brand">
+      <div class="brand-mark" id="loginBrandMark">B</div>
+      <h1 id="loginBrandName">Fast Food Zayn</h1>
+      <p>Caisse rapide pour restaurant</p>
+    </div>
+
+    <form id="loginForm" class="login-form" autocomplete="off">
+      <label class="field">
+        <span class="field-label">Nom d'utilisateur</span>
+        <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Mot de passe</span>
+        <div class="password-wrap">
+          <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+          <button type="button" id="togglePassword" class="icon-btn" aria-label="Afficher le mot de passe">
+            <svg id="eyeIcon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 5c-5 0-9.27 3.11-11 7.5C2.73 16.89 7 20 12 20s9.27-3.11 11-7.5C21.27 8.11 17 5 12 5zm0 12.5A5 5 0 1 1 12 7.5a5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+          </button>
+        </div>
+      </label>
+
+      <div class="login-row">
+        <label class="checkbox">
+          <input type="checkbox" id="rememberMe">
+          <span>Se souvenir de moi</span>
+        </label>
+      </div>
+
+      <p id="loginError" class="login-error" hidden>Nom d'utilisateur ou mot de passe incorrect</p>
+
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+        <span class="btn-label">Se connecter</span>
+        <span class="spinner" hidden></span>
+      </button>
+
+      <button type="button" class="link-btn credentials-link" id="openCredentialsBtn">Modifier le nom d'utilisateur / mot de passe</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== CHANGE CREDENTIALS MODAL ===== -->
+<div class="modal-overlay" id="credentialsModalOverlay" hidden>
+  <div class="modal credentials-modal">
+    <div class="modal-header">
+      <h3>Modifier les identifiants</h3>
+      <button class="icon-btn" id="closeCredentialsBtn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <form id="credentialsForm" class="credentials-form" autocomplete="off">
+      <p class="topbar-sub">Saisissez vos identifiants actuels pour pouvoir les changer.</p>
+
+      <label class="field">
+        <span class="field-label">Nom d'utilisateur actuel</span>
+        <input type="text" id="oldUsername" required>
+      </label>
+      <label class="field">
+        <span class="field-label">Mot de passe actuel</span>
+        <input type="password" id="oldPassword" required>
+      </label>
+
+      <div class="settings-section-divider"><span>Nouveaux identifiants</span></div>
+
+      <label class="field">
+        <span class="field-label">Nouveau nom d'utilisateur</span>
+        <input type="text" id="newUsername" required>
+      </label>
+      <label class="field">
+        <span class="field-label">Nouveau mot de passe</span>
+        <input type="password" id="newPassword" required>
+      </label>
+      <label class="field">
+        <span class="field-label">Confirmer le nouveau mot de passe</span>
+        <input type="password" id="confirmNewPassword" required>
+      </label>
+
+      <div class="settings-section-divider"><span>Nom & logo du restaurant</span></div>
+
+      <label class="field">
+        <span class="field-label">Nom du restaurant</span>
+        <input type="text" id="credRestaurantName" placeholder="ex: Fast Food Zayn">
+      </label>
+      <label class="field">
+        <span class="field-label">Logo (optionnel)</span>
+        <div class="image-upload-row">
+          <img id="credLogoPreview" class="image-upload-preview" hidden>
+          <label class="btn btn-ghost image-upload-btn" for="credLogoInput">Choisir un logo</label>
+          <input type="file" id="credLogoInput" accept="image/*" hidden>
+        </div>
+      </label>
+
+      <p class="login-error" id="credentialsError" hidden>Nom d'utilisateur ou mot de passe actuel incorrect</p>
+      <p class="save-confirm" id="credentialsSuccess" hidden>Identifiants mis à jour avec succès.</p>
+
+      <button type="submit" class="btn btn-primary btn-block">Enregistrer les nouveaux identifiants</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= DASHBOARD VIEW ================= -->
+<div id="view-app" class="view view-app" hidden>
+  <div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-logo">
+          <div class="brand-mark small" id="sidebarBrandMark">B</div>
+          <span class="sidebar-logo-text" id="sidebarBrandName">Fast Food Zayn</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="pos">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 3h11M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Caisse</span>
+        </button>
+        <button class="nav-item" data-page="orders">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M9 4h6a2 2 0 0 1 2 2v14l-5-3-5 3V6a2 2 0 0 1 2-2z"/></svg>
+          <span>Commandes</span>
+        </button>
+        <button class="nav-item" data-page="stats">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 20V10m6 10V4m6 16v-7"/></svg>
+          <span>Statistiques</span>
+        </button>
+        <button class="nav-item" data-page="settings">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.2h3.4l.6 2.4a7.6 7.6 0 0 1 2 1.16l2.36-.8 1.7 2.94-1.87 1.6a7.7 7.7 0 0 1 0 2.32l1.87 1.6-1.7 2.94-2.36-.8a7.6 7.6 0 0 1-2 1.16l-.6 2.4h-3.4l-.6-2.4a7.6 7.6 0 0 1-2-1.16l-2.36.8-1.7-2.94 1.87-1.6a7.7 7.7 0 0 1 0-2.32L3.64 8.9l1.7-2.94 2.36.8a7.6 7.6 0 0 1 2-1.16zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+          <span>Réglages</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item logout" id="logoutBtn">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M15 17l5-5-5-5M20 12H9m0 9H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/></svg>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="bnav-item active" data-page="pos">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5"/></svg>
+        <span>Caisse</span>
+      </button>
+      <button class="bnav-item" data-page="orders">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M9 4h6a2 2 0 0 1 2 2v14l-5-3-5 3V6a2 2 0 0 1 2-2z"/></svg>
+        <span>Commandes</span>
+      </button>
+      <button class="bnav-item" data-page="stats">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 20V10m6 10V4m6 16v-7"/></svg>
+        <span>Stats</span>
+      </button>
+      <button class="bnav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M10.3 3.2h3.4l.6 2.4a7.6 7.6 0 0 1 2 1.16l2.36-.8 1.7 2.94-1.87 1.6a7.7 7.7 0 0 1 0 2.32l1.87 1.6-1.7 2.94-2.36-.8a7.6 7.6 0 0 1-2 1.16l-.6 2.4h-3.4"/></svg>
+        <span>Réglages</span>
+      </button>
+      <button class="bnav-item" data-page="cart-mobile" id="bnavCart">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-1.5 3h11M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+        <span>Panier</span>
+        <span class="cart-badge" id="cartBadgeMobile" hidden>0</span>
+      </button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- ===== POS PAGE ===== -->
+      <section class="page page-pos active" id="page-pos">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2 id="restaurantNameLabel">Fast Food Zayn</h2>
+            <p class="topbar-sub">Caisse — commande en cours</p>
+          </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M21 21l-4.3-4.3M18 10.5A7.5 7.5 0 1 1 3 10.5a7.5 7.5 0 0 1 15 0z"/></svg>
+            <input type="text" id="searchInput" placeholder="Rechercher un produit...">
+          </div>
+          <button class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Basculer le thème">
+            <svg id="themeIcon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.4 5.4 0 0 1-7.54-7.54A9 9 0 0 0 12 3z"/></svg>
+          </button>
+          <button class="btn btn-ghost theme-toggle" id="logoutBtnTopbar" aria-label="Déconnexion" title="Déconnexion">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M15 17l5-5-5-5M20 12H9m0 9H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/></svg>
+          </button>
+        </header>
+
+        <div class="category-scroller" id="categoryScroller">
+          <button class="cat-chip active" data-cat="all">Tout</button>
+          <!-- categories injected -->
+        </div>
+
+        <div class="pos-body">
+          <div class="products-panel">
+            <div class="product-grid" id="productGrid"></div>
+            <p class="empty-state" id="emptyState" hidden>Aucun produit trouvé.</p>
+          </div>
+
+          <aside class="cart-panel" id="cartPanel">
+            <div class="cart-header">
+              <h3>Panier</h3>
+              <div class="cart-header-actions">
+                <button class="link-btn" id="clearCartBtn">Vider</button>
+                <button class="cart-close-btn" id="closeCartBtn" aria-label="Quitter le panier" title="Quitter">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+                  Quitter
+                </button>
+              </div>
+            </div>
+
+            <div class="cart-items" id="cartItems">
+              <p class="cart-empty" id="cartEmptyMsg">Votre panier est vide</p>
+            </div>
+
+            <div class="cart-summary">
+              <div class="summary-row">
+                <span>Produits</span>
+                <span id="sumProductCount">0</span>
+              </div>
+              <div class="summary-row">
+                <span>Sous-total</span>
+                <span id="sumSubtotal">0 Ar</span>
+              </div>
+
+              <div class="summary-row editable" id="deliveryFeeRow">
+                <span>Frais de livraison</span>
+                <div class="mini-input">
+                  <input type="number" id="deliveryFeeInput" min="0" value="0">
+                  <span>Ar</span>
+                </div>
+              </div>
+
+              <div class="summary-row editable discount-row">
+                <span>Remise</span>
+                <div class="discount-controls">
+                  <select id="discountType">
+                    <option value="fixed">Ar</option>
+                    <option value="percent">%</option>
+                  </select>
+                  <input type="number" id="discountValue" min="0" value="0">
+                </div>
+              </div>
+
+              <div class="summary-row total-row">
+                <span>Total à payer</span>
+                <span id="sumGrandTotal">0 Ar</span>
+              </div>
+            </div>
+
+            <div class="payment-section" id="paymentSection">
+              <p class="payment-label">Mode de paiement</p>
+              <div class="payment-grid" id="paymentGrid">
+                <button class="payment-chip active" data-method="Espèces">Espèces</button>
+                <button class="payment-chip" data-method="Orange Money">Orange Money</button>
+                <button class="payment-chip" data-method="Airtel Money">Airtel Money</button>
+                <button class="payment-chip" data-method="Mvola">Mvola</button>
+                <button class="payment-chip" data-method="Carte Bancaire">Carte Bancaire</button>
+              </div>
+            </div>
+
+            <input type="text" id="customerName" class="customer-input" placeholder="Nom du client (optionnel)">
+
+            <div class="order-type-toggle" id="orderTypeToggle">
+              <button class="type-chip active" data-type="livraison">Livraison</button>
+              <button class="type-chip" data-type="recuperation">Récupération</button>
+              <button class="type-chip" data-type="reservation">Réservation Table</button>
+            </div>
+
+            <div class="delivery-fields" id="deliveryFields">
+              <input type="text" id="deliveryAddress" class="customer-input" placeholder="Adresse de livraison">
+              <input type="text" id="deliveryLandmark" class="customer-input" placeholder="Point de repère">
+              <input type="tel" id="deliveryPhone" class="customer-input" placeholder="Numéro de téléphone client">
+              <div class="order-type-toggle" id="deliveryDayToggle">
+                <button class="type-chip active" data-day="today">Aujourd'hui</button>
+                <button class="type-chip" data-day="demain" id="deliveryDayTomorrowBtn">Demain</button>
+              </div>
+              <div class="delivery-time-row">
+                <label class="time-field">
+                  <span>Heure de commande</span>
+                  <input type="time" id="orderTime">
+                </label>
+                <label class="time-field">
+                  <span>Heure d'arrivée</span>
+                  <input type="time" id="arrivalTime">
+                </label>
+              </div>
+            </div>
+
+            <div class="table-field" id="tableField" hidden>
+              <select id="tableNumberSelect" class="customer-input">
+                <option value="">Choisir une table</option>
+                <option value="Table 1">Table 1</option>
+                <option value="Table 2">Table 2</option>
+                <option value="Table 3">Table 3</option>
+                <option value="Table 4">Table 4</option>
+                <option value="Table 5">Table 5</option>
+                <option value="Table 6">Table 6</option>
+                <option value="Table 7">Table 7</option>
+                <option value="Table 8">Table 8</option>
+                <option value="Table 9">Table 9</option>
+                <option value="Table 10">Table 10</option>
+                <option value="Table 11">Table 11</option>
+                <option value="Table 12">Table 12</option>
+                <option value="Table 13">Table 13</option>
+                <option value="Table 14">Table 14</option>
+                <option value="Table 15">Table 15</option>
+              </select>
+            </div>
+
+            <button class="btn btn-accent btn-block btn-validate" id="validateOrderBtn">
+              Valider la commande
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ===== ORDERS PAGE ===== -->
+      <section class="page page-orders" id="page-orders">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Commandes</h2>
+            <p class="topbar-sub">Historique des commandes validées</p>
+          </div>
+          <button class="btn btn-ghost reset-counter-btn" id="resetOrderNumberBtn">Réinitialiser le numéro</button>
+        </header>
+        <div class="orders-search-row">
+          <div class="search-wrap orders-search-wrap">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M21 21l-4.3-4.3M18 10.5A7.5 7.5 0 1 1 3 10.5a7.5 7.5 0 0 1 15 0z"/></svg>
+            <input type="text" id="ordersSearchInput" placeholder="Rechercher une commande (numéro, client, table...)">
+          </div>
+        </div>
+        <div class="orders-list" id="ordersList"></div>
+      </section>
+
+      <!-- ===== STATS PAGE ===== -->
+      <section class="page page-stats" id="page-stats">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Statistiques</h2>
+            <p class="topbar-sub">Vue d'ensemble des ventes</p>
+          </div>
+          <button class="btn btn-ghost reset-counter-btn" id="resetStatsBtn">Réinitialiser les totaux</button>
+        </header>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Ventes du jour</span>
+            <span class="stat-value" id="statTodaySales">0 Ar</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Commandes du jour</span>
+            <span class="stat-value" id="statTodayOrders">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Revenu total</span>
+            <span class="stat-value" id="statTotalRevenue">0 Ar</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Panier moyen</span>
+            <span class="stat-value" id="statAvgOrder">0 Ar</span>
+          </div>
+          <div class="stat-card stat-card-wide">
+            <span class="stat-label">Produit le plus vendu</span>
+            <span class="stat-value" id="statTopProduct">—</span>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Ventes des 7 derniers jours</h3>
+          <canvas id="salesChart" height="220"></canvas>
+        </div>
+
+        <div class="closing-card">
+          <div class="closing-header closing-header-row">
+            <div>
+              <h3>Clôture de caisse — Aujourd'hui</h3>
+              <p class="topbar-sub">Total à vérifier dans le tiroir-caisse ce soir.</p>
+            </div>
+            <button class="btn btn-ghost" id="printClosingBtn">Imprimer</button>
+          </div>
+          <div class="closing-total">
+            <span>Total encaissé aujourd'hui</span>
+            <span id="closingGrandTotal">0 Ar</span>
+          </div>
+          <div class="closing-breakdown" id="closingBreakdown"></div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS PAGE ===== -->
+      <section class="page page-settings" id="page-settings">
+        <header class="topbar">
+          <div class="topbar-title">
+            <h2>Réglages</h2>
+            <p class="topbar-sub">Personnalisez votre restaurant</p>
+          </div>
+        </header>
+
+        <div class="settings-form">
+          <label class="field">
+            <span class="field-label">Nom du restaurant</span>
+            <input type="text" id="settingRestaurantName" placeholder="Fast Food Zayn">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Devise</span>
+            <input type="text" id="settingCurrency" placeholder="Ar">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Frais de livraison par défaut</span>
+            <input type="number" id="settingDefaultDelivery" min="0" placeholder="0">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Message du ticket</span>
+            <input type="text" id="settingThankYou" placeholder="Merci de votre visite !">
+          </label>
+
+          <div class="settings-section-divider">
+            <span>Coordonnées (affichées sur le ticket si renseignées)</span>
+          </div>
+
+          <label class="field">
+            <span class="field-label">Emplacement / Adresse</span>
+            <input type="text" id="settingLocation" placeholder="ex: Analakely, Antananarivo">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Numéro de téléphone</span>
+            <input type="text" id="settingPhone" placeholder="ex: 034 00 000 00">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Page Facebook</span>
+            <input type="text" id="settingFacebook" placeholder="ex: facebook.com/byashfastfood">
+          </label>
+
+          <label class="field">
+            <span class="field-label">WhatsApp</span>
+            <input type="text" id="settingWhatsapp" placeholder="ex: 034 00 000 00">
+          </label>
+
+          <div class="settings-row">
+            <span class="field-label">Thème</span>
+            <div class="theme-switch">
+              <button class="chip-btn active" id="themeLightBtn">Clair</button>
+              <button class="chip-btn" id="themeDarkBtn">Sombre</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="saveSettingsBtn">Enregistrer</button>
+          <p class="save-confirm" id="saveConfirmMsg" hidden>Réglages enregistrés.</p>
+        </div>
+
+        <div class="price-editor">
+          <div class="price-editor-header">
+            <h3>Gestion des prix</h3>
+            <p class="topbar-sub">Modifiez le prix de n'importe quel produit du menu.</p>
+          </div>
+          <div class="search-wrap price-search-wrap">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M21 21l-4.3-4.3M18 10.5A7.5 7.5 0 1 1 3 10.5a7.5 7.5 0 0 1 15 0z"/></svg>
+            <input type="text" id="priceSearchInput" placeholder="Rechercher un produit à modifier...">
+          </div>
+          <div class="price-editor-list" id="priceEditorList"></div>
+          <div class="price-editor-actions">
+            <button class="btn btn-ghost" id="resetPricesBtn">Réinitialiser tous les prix</button>
+            <button class="btn btn-primary" id="savePricesBtn">Enregistrer les prix</button>
+          </div>
+          <p class="save-confirm" id="savePricesConfirmMsg" hidden>Prix mis à jour.</p>
+
+          <div class="export-images-block">
+            <p class="topbar-sub">Vous avez changé une image ? Téléchargez-la ici pour remplacer le fichier correspondant dans le dossier <code>assets/images/</code> avant de re-empaqueter l'application.</p>
+            <button class="btn btn-ghost" id="exportImagesBtn">Télécharger les images modifiées</button>
+            <p class="save-confirm" id="exportImagesMsg" hidden></p>
+          </div>
+        </div>
+
+        <div class="add-product-editor">
+          <div class="price-editor-header">
+            <h3>Ajouter un produit</h3>
+            <p class="topbar-sub">Créez un nouvel article de menu, par exemple dans "ENTRÉE".</p>
+          </div>
+
+          <div class="add-product-form">
+            <label class="field">
+              <span class="field-label">Catégorie</span>
+              <select id="newProductCategory"></select>
+            </label>
+            <label class="field" id="newCategoryNameField" hidden>
+              <span class="field-label">Nom de la nouvelle catégorie</span>
+              <input type="text" id="newCategoryName" placeholder="ex: ENTRÉE">
+            </label>
+            <label class="field">
+              <span class="field-label">Nom du produit</span>
+              <input type="text" id="newProductName" placeholder="ex: Salade de crudités">
+            </label>
+            <label class="field">
+              <span class="field-label">Prix</span>
+              <input type="number" id="newProductPrice" min="0" placeholder="0">
+            </label>
+            <label class="field">
+              <span class="field-label">Image du produit (optionnel)</span>
+              <div class="image-upload-row">
+                <img id="newProductImagePreview" class="image-upload-preview" hidden>
+                <label class="btn btn-ghost image-upload-btn" for="newProductImage">Choisir une image</label>
+                <input type="file" id="newProductImage" accept="image/*" hidden>
+              </div>
+            </label>
+            <button class="btn btn-accent" id="addProductBtn">Créer le produit</button>
+            <p class="save-confirm" id="addProductConfirmMsg" hidden>Produit créé avec succès.</p>
+          </div>
+
+          <div class="custom-products-list" id="customProductsList"></div>
+        </div>
+
+        <div class="add-product-editor">
+          <div class="price-editor-header">
+            <h3>Créer un pack / combo</h3>
+            <p class="topbar-sub">Ex: Pack Duo — Pizza + Sandwich + Boisson chaude, à un prix fixe.</p>
+          </div>
+
+          <div class="add-product-form">
+            <label class="field">
+              <span class="field-label">Nom du pack</span>
+              <input type="text" id="packName" placeholder="ex: Pack Duo">
+            </label>
+            <label class="field">
+              <span class="field-label">Prix du pack</span>
+              <input type="number" id="packPrice" min="0" placeholder="0">
+            </label>
+            <div class="field">
+              <span class="field-label">Catégories incluses</span>
+              <div class="pack-categories" id="packCategoriesList"></div>
+            </div>
+            <button class="btn btn-accent" id="createPackBtn">Créer le pack</button>
+            <p class="save-confirm" id="createPackConfirmMsg" hidden>Pack créé avec succès.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MOBILE CART DRAWER (reuses cart panel content via JS) -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+</div>
+
+<!-- ===== RECEIPT MODAL ===== -->
+<div class="modal-overlay" id="receiptModalOverlay" hidden>
+  <div class="modal receipt-modal">
+    <div class="modal-header">
+      <h3>Ticket de caisse</h3>
+      <button class="icon-btn" id="closeReceiptBtn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="receipt-paper" id="receiptContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="printReceiptBtn">Imprimer</button>
+      <button class="btn btn-primary" id="downloadPdfBtn">Télécharger PDF</button>
+    </div>
+    <div class="modal-actions modal-actions-close">
+      <button class="btn btn-ghost btn-block" id="closeReceiptBtn2">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EDIT ORDER MODAL ===== -->
+<div class="modal-overlay" id="editOrderModalOverlay" hidden>
+  <div class="modal edit-order-modal">
+    <div class="modal-header">
+      <h3 id="editOrderTitle">Modifier la commande</h3>
+      <button class="icon-btn" id="closeEditOrderBtn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="edit-order-body">
+      <div class="edit-order-add">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M21 21l-4.3-4.3M18 10.5A7.5 7.5 0 1 1 3 10.5a7.5 7.5 0 0 1 15 0z"/></svg>
+          <input type="text" id="editOrderSearch" placeholder="Ajouter un produit à la commande...">
+        </div>
+        <div class="edit-order-results" id="editOrderResults" hidden></div>
+      </div>
+
+      <div class="edit-order-items" id="editOrderItems"></div>
+
+      <div class="edit-order-summary">
+        <div class="summary-row">
+          <span>Sous-total</span>
+          <span id="editOrderSubtotal">0 Ar</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total à payer</span>
+          <span id="editOrderGrandTotal">0 Ar</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelEditOrderBtn">Annuler</button>
+      <button class="btn btn-primary" id="saveEditOrderBtn">Enregistrer les modifications</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="data/products-data.js"></script>
+<script src="js/products.js"></script>
+<script src="js/categories.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/receipt.js"></script>
+<script src="js/order-editor.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/login.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
